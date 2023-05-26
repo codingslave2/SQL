@@ -1,13 +1,34 @@
-SELECT * FROM tbl_class;
-SELECT * FROM tbl_student;
+-- 집합 연산
+CREATE TABLE job(
+    job_id VARCHAR2(10),
+    salary NUMBER(5) -- 달러로 입력
+);
 
--- 조건
-SELECT *
-FROM tbl_class cls, tbl_student stu
-WHERE cls.cid = stu.cid;
+INSERT INTO job VALUES ('manager', 1300);
+INSERT INTO job VALUES ('manager', 1900);
+INSERT INTO job VALUES ('helper', 1000);
+INSERT INTO job VALUES ('helper', 1500);
+INSERT INTO job VALUES ('helper', 2500);
 
---학과별 학생수를 구하시오
-SELECT cls.cid, cls.cname, COUNT(*) 학생수
-FROM tbl_class cls, tbl_student stu
-WHERE cla.cid = stu.cid
-GROUP BY ROLLUP(cls.cid, cls.cname);
+-- job 전체의 개수와 급여의 총합계 구하기
+
+SELECT COUNT(*) 개수, SUM(salary) 총합계
+FROM job;
+
+-- 직업 아이디(job_id)별 개수와 급여의 총합계 구하기
+SELECT COUNT(*) 개수, SUM(salary) 총합계
+FROM job
+GROUP BY job_id;
+
+-- 직업 아이디(job_id)별 개수와 급여의 최대값과 최소값 구하기
+SELECT job_id, MAX(salary) RESULT
+FROM job
+GROUP BY job_id
+UNION ALL
+SELECT job_id, MIN(salary) RESULT
+FROM job
+GROUP BY job_id;
+
+COMMIT;
+
+SELECT * FROM job;
